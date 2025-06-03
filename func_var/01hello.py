@@ -29,11 +29,12 @@
 #        \n : end every line by starting a new line.
 #        sep: separate values by a space " ".
 
-name = input("What is your name? ")
+'name = input("What is your name? ")'
+name = 'This is python CS50'
 ' print("Hello," , end="") '
 ' print(name) '
 
-' print("Hello," , name, sep="???") '
+print("Hello," , name, sep="???")
 
 # Note: use \"...\" to print quotes
 
