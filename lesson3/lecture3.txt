@@ -1,0 +1,104 @@
+Lecture 3
+
+Exceptions:
+        SyntaxError - needs human to fix it
+        RuntimeError - needs code to prevent program from failing.
+
+    E.g.:
+        x = int(input("What is x? "))
+        print(f"x is {x}")              # f formats the string so that python reads what's in {} as a variable
+
+        # if the user inputs something other than an integer
+        # Write code with error handling in mind
+        #   ValueError - something wrong with the value assigned
+        #   try
+        #   except
+        #   NameError - something wrong with the code
+        #   pass - catches the error but "passes" on saying/doing anything
+        
+
+        # Iteration 1 -  corrects ValueError
+        try:                                # tries the following
+            x = int(input("What is x? "))
+            print(f"x is {x}")    
+        except ValueError:                  # in case that the value given by the user is not acceptable
+            print("x is not an integer")    # this message will replace the long scary messages that could appear
+        
+
+        # Iteration 2 - corrects NameError
+        try:                                
+            x = int(input("What is x? "))
+             
+        except ValueError:                  
+            print("x is not an integer")
+        else:                               # else applies if try succeeds
+            print(f"x is {x}")
+
+
+        # Iteration 3 - loop the request
+        while True:
+            try:                                
+                x = int(input("What is x? "))
+             
+            except ValueError:                  
+                print("x is not an integer")
+            else:
+                break                               
+        print(f"x is {x}")
+
+
+        # Iteration 4 - different place for break
+        while True:
+            try:                                
+                x = int(input("What is x? "))
+                break                           #if the code fails at x, the exception will take place 
+            except ValueError:                  
+                print("x is not an integer")
+                                         
+        print(f"x is {x}")
+
+
+        # Iteration 5 - in functions
+        def main():
+            x=get_int()
+            print(f"x is {x}")
+        
+        def get_int():
+            while True:
+                try:                                
+                    return int(input("What is x? "))             
+                except ValueError:                  
+                    print("x is not an integer")
+                else:
+                    return x                        # return is stronger than break
+        
+        main()
+
+        # Iteration 6 - pass
+        def main():
+            x = get_int()
+            print(f"x is {x}")
+        
+        def get_int():
+            while True:
+                try:                                
+                    return int(input("What is x? "))             
+                except ValueError:                  
+                    pass                                # the funciton will keep prompting "What is x? "        
+        main()
+
+
+        # Iteration 7 - clean the functions
+        def main():
+            x = get_int("What is x? ")
+            print(f"x is {x}")
+        
+        def get_int(prompt):
+            while True:
+                try:                                
+                    return int(input(prompt))             
+                except ValueError:                  
+                    pass                                # the funciton will keep prompting "What is x? "        
+        main()
+
+        
