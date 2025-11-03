@@ -1,0 +1,197 @@
+Lecture 4
+
+Libraries:
+    Set programs via modules (library with 1+ functions). Promotes code reusability.
+
+Examples of modules: (docs.python.org/3/library/... )
+    random.<_> 
+            choice(seq) - returns an item in the sequence (equal probability)
+            randint(a,b)- get back a random int between a and b inclusive
+            shuffle()   - shuffles a list of items
+    statistics
+            mean([])    - returns the average
+    sys     Command-line arguments - provides arguments on the command-line 
+            argv - argument vector = all of the things typed in before hitting ENTER
+                    elements separated by spaces
+            exit - exits the program
+
+exmples of Packages: 3rd party library
+    PyPl - pypi.org - place to download packages
+        cowsay - a cow will say something (#key art)
+        request - docs.python-request.org
+
+
+How to load a modules?
+
+Iteration 1: generate a coin flip
+
+    import random 
+
+    coin = random.choice(["heads", "tails"])
+    print(coin)
+
+
+Iteration 2: Be more specific in the functions needed.
+    
+    from random import choice
+
+    coin = choice(["heads", "tails"])
+    print(coin)
+
+
+Iteration 3: randint
+    import random
+
+    number = random.randint(1,10)
+    print(number)
+
+
+Iteration 4: shuffle
+    import random
+
+    cards = ["jack", "queen", "king"]
+
+    random.shuffle(cards)
+
+    for card in cards:
+        print(card)
+
+
+Iteration 5: Statistics mean
+
+    import statistics
+
+    print(statistics.mean([100,90]))
+
+
+----    Command-line arguments  ----
+Iteration 6: Command-line arguments
+
+    import sys
+
+    print("hello, my name is", sys.argv[1])         #will print hello, my name is David
+    ## python name.py David                         # [0] = name of file (name.py)
+
+
+In case of no name provided => IndexError 
+
+Iteration 7: Error exception
+
+    import sys
+
+    try:
+        print("hello, my name is", sys.argv[1])
+    except IndexError:
+        print("Too few arguments")
+
+
+Iteration 8: Refined user advise for error handling
+
+    import sys
+
+    if len(sys.argv) <2:
+        print("Too few arguments")              
+    elif len(sys.argv) > 2:
+        print("Too many argiments")
+    else:
+        print("hello, my name is", sys.argv[1])     
+
+
+Iteration 9: Good practice - dont hide the code you care about in an else statement.
+                sys.exit(<"message">) - exit the program earlier 
+
+    import sys
+
+    if len(sys.argv) <2:
+        sys.exit("Too few arguments")              
+    elif len(sys.argv) > 2:
+        sys.exit("Too many argiments")
+
+    print("hello, my name is", sys.argv[1]) 
+
+
+
+Iteration 10: multiple argument input
+                slice - sys.argv[a:b] 
+
+    import sys
+    
+    if len(sys.argv) <2:
+        sys.exit("Too few arguments")    
+
+    for arg in sys.argv[1:]:
+        print("hello, my name is", arg)
+
+
+Iteration 11: Package management - pip 
+In terminal: pip install cowsay
+
+    import cowsay
+    import sys
+
+    if len(sys.argv) == 2:
+        cowsay.cow("hello, " + sys.argv[1])
+        cowsay.trex("hello, " + sys.argv[1])
+
+
+Iteration 12: Package management - API (3rd party services that we can use)
+In terminal: pip install request
+
+    import requests
+    import sys
+
+    if len(sys.argv) != 2:
+        sys.exit()
+    
+    response = request.get("https://itunes.apple.com/search?entity=song&limit=1&term=" + sys.argv[1])
+    print(response.json())                  #json response returned as python dictionary
+
+Iteration 13: package management - 
+                json (comes with python, no need to install with pip)
+    import json
+    import requests
+    import sys
+
+    if len(sys.argv) != 2:
+        sys.exit()
+    
+    response = request.get("https://itunes.apple.com/search?entity=song&limit=1&term=" + sys.argv[1])
+    print(json.dumps(response.json(), indent=2))        #indent every 2 spaces
+
+
+Iteration 14:  print a specific object from the json response
+    import json
+    import requests
+    import sys
+
+    if len(sys.argv) != 2:
+        sys.exit()
+    
+    response = request.get("https://itunes.apple.com/search?entity=song&limit=10&term=" + sys.argv[1])
+
+    o = response.json()
+    for result in o["results"]:
+        print(result["trackName"])
+
+
+Iteration 15: create your own library
+##say we define this functions in sayings.py
+    def main():
+        hello("world")
+        goodbye("world")
+
+    def hello(name):
+        print(f"hello, {name}")
+    
+    def goodbye(name):
+        print(f"goodbye, {name}")
+
+    if __name__ == "__main()__"
+        main()
+
+## now we code on our file say.py 
+    import sys
+    from sayings import hello
+
+    if len(sys.argv) == 2:
+        hello(sys.argv[1])
