@@ -1,0 +1,236 @@
+Lesson 5: Unit Tests
+    Creating code to test code
+
+Recall code calculator.py:
+def main():
+    x = int(input("What is x? "))
+    print("x square is", square(x))
+def square(n):
+    return n * n
+
+if __name__ == "__main()__":
+    main()
+
+Now we will write a code that will soley test this program.
+    call it: 
+                test_calculator.py
+
+
+###################################################################################################
+Iteration 1: from calculator import square   #import the function to test
+
+def main():
+    test_square()
+
+def test_square():      #name convention test_<what i want to test>
+    if square(2) != 4:
+        print("2 square was not 4")
+    if square(3) != 9:
+        print("3 square was not 9")
+
+if __name__ == "__main()__":
+    main()                          #it will not print anything if it works
+
+
+###################################################################################################
+Iteration 2: assert - 
+            we assert that a statement is true. If it is, nothing will happen. However, 
+            if it isn't, error will pop up
+
+
+def main():
+    test_square()
+
+def test_square():      
+    assert square(2) = 4
+    assert square(3) = 9
+
+if __name__ == "__main()__":
+    main() 
+
+
+###################################################################################################
+Iteration 3: try/except + assert
+            long code but more consistent with the usual try/except concepts
+            all the places that fail will show on terminal
+def main():
+    test_square()
+
+def test_square():      
+    try:
+        assert square(2) = 4
+    except AssertionError:
+        print("2 square was not 4")
+    try:
+        assert square(3) = 9
+    except AssertionError:
+        print("3 square was not 9")
+    try:
+        assert square(-2) = 4
+    except AssertionError:
+        print("-2 square was not 4")
+    try:
+        assert square(-3) = 9
+    except AssertionError:
+        print("-3 square was not 9")
+    try:
+        assert square(0) = 0
+    except AssertionError:
+        print("0 square was not 0")
+
+if __name__ == "__main()__":
+    main() 
+
+
+###################################################################################################
+Iteration 4: pytest - 3rd party library that will test what you want to test 
+                pip install pytest 
+from calculator import square
+
+def test_square():
+    assert square(2) = 4
+    assert square(3) = 9
+    assert square(-2) = 4
+    assert square(-3) = 9
+    assert square(0) = 0
+
+
+On terminal:
+    pytest test_calculator.py
+=============FAILURES=================
+....test_square
+.
+.                                           #test will stop when it finds an error
+.
+=============test summary=============
+
+
+###################################################################################################
+Iteration 5: test in different sections
+
+from calculator import square
+
+def test_possitive():
+    assert square(2) = 4
+    assert square(3) = 9
+def test_negative():
+    assert square(-2) = 4
+    assert square(-3) = 9
+def test_zero():
+    assert square(0) = 0
+
+On terminal:
+    pytest test_calculator.py           #all the failures on each function will appear
+                                        # F = failures  .= pass
+                                        # FF. = 1st failled, 2nd failed, 3rd passed
+
+
+###################################################################################################
+Iteration 6: testing main()
+
+import pytest
+from calculator import square
+
+def test_possitive():
+    assert square(2) = 4
+    assert square(3) = 9
+def test_negative():
+    assert square(-2) = 4
+    assert square(-3) = 9
+def test_zero():
+    assert square(0) = 0
+
+def test_str():
+    with pytest.raises(TypeError):          #checks that passing an str will raise a TypeError
+        square("cat")
+
+
+###################################################################################################
+###################################################################################################
+###################################################################################################
+
+Example 2: hello.py             not too testable
+
+def main():
+    name = input("What is your name? ")
+    hello(name)
+
+def hello(to="world"):
+    print("hello," to)
+
+if __name__ == "__main()__"
+    main() 
+
+###################################################################################################
+Iteration 7: 
+
+from hello import hello
+
+def test_hello():
+    hello("David") == "hello, David"        # hello function does not have a return value, just a print
+                                            # this test will not work.
+
+###################################################################################################
+###################################################################################################
+
+Example 2.1: hello.py but more testable
+
+def main():
+    name = input("What is your name? ")
+    print(hello(name))
+
+def hello(to="world"):
+    return f"hello, {to}"
+
+if __name__ == "__main()__"
+    main() 
+
+###################################################################################################
+Iteration 8: 
+
+from hello import hello
+
+def test_default():
+    assert hello() == "hello, world"
+def test_argument()
+    assert hello("David") == "hello, David"
+
+
+
+###################################################################################################
+###################################################################################################
+###################################################################################################
+
+testing a program using a folder with many Tests
+    folder  test
+test_hello.py
+
+from hello import hello
+
+def test_default():
+    assert hello() == "hello, world"
+def test_argument()
+    assert hello("David") == "hello, David"
+
+to be able to test: within the test directory (folder test), create a folder __init__.py
+    has te effect of treating the folder as a package (even if it is empty)
+this file can be left empty
+
+on terminal:
+    pytest test     #test will be run from all the files on the folder
+
+
+###################################################################################################
+###################################################################################################
+###################################################################################################
+
+Unit testing and Error handling
+look at the fuel.py & test_fuel.py for more detail:
+
+def test_convert_negative():
+    with pytest.raises(ValueError):
+        convert("-1/2")
+    with pytest.raises(ValueError):
+        convert("1/-2")
+
+Note: keep recurrent input prompting outside the function you want to test
